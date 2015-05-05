@@ -47,7 +47,7 @@ public class AlarmService extends IntentService {
 
             synchronized (this) {
                 try {
-                    wait(1000);
+                    wait(200);
                 } catch (Exception e) {
                 }
             }

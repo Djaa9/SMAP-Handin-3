@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class ActivityA extends Activity implements View.OnClickListener{
@@ -19,12 +20,23 @@ public class ActivityA extends Activity implements View.OnClickListener{
 
     Button btnStartTimer;
     EditText etTimerValue;
+    ProgressBar countdownProgressBar;
     Intent toService;
+    boolean firstReceive = true;
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(getApplicationContext(),Long.toString(intent.getLongExtra(getString(R.string.INTENT_KEY_VALUE),0)),Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),Long.toString(intent.getLongExtra(getString(R.string.INTENT_KEY_VALUE),0)),Toast.LENGTH_SHORT).show();
+
+            if (firstReceive){
+                countdownProgressBar.setMax((int)intent.getLongExtra(getString(R.string.INTENT_KEY_VALUE),0));
+                countdownProgressBar.setProgress(0);
+                firstReceive = false;
+            }
+            else{
+                countdownProgressBar.setProgress(countdownProgressBar.getMax () - (int)intent.getLongExtra(getString(R.string.INTENT_KEY_VALUE),0));
+            }
         }
     };
 
@@ -35,6 +47,7 @@ public class ActivityA extends Activity implements View.OnClickListener{
 
         btnStartTimer = (Button) findViewById(R.id.btn_start_timer);
         etTimerValue = (EditText) findViewById(R.id.et_timer_inputValue);
+        countdownProgressBar = (ProgressBar) findViewById(R.id.pgb_countdown);
 
         btnStartTimer.setOnClickListener(this);
 }
