@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">HI3Group15_201270115</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_activity_b">ActivityB</string>
+    <string name="btn_start_timer">Start Timer</string>
+    <string name="et_hint">Enter Timer Value</string>
+    <string name="btn_start_timer_pressed_msg">btn_start_timer pressed</string>
+    <string name="INTENT_KEY_VALUE">djaa9.dk.thepage.hi3group15_201270115.INTENT_KEY_VALUE</string>
+
+
+</resources>
