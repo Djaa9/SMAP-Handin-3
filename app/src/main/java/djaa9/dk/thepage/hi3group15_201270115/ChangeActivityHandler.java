@@ -12,10 +12,8 @@ public class ChangeActivityHandler extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "timer trigger",Toast.LENGTH_SHORT).show();
-
         Intent i = new Intent();
-        i.setClassName("djaa9.dk.thepage.hi3group15_201270115","djaa9.dk.thepage.hi3group15_201270115.ActivityB");
+        i.setClassName(context.getPackageName(), ActivityB.class.getName());
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.putExtra(context.getString(R.string.INTENT_KEY_VALUE), intent.getIntExtra(context.getString(R.string.INTENT_KEY_VALUE),0));
 

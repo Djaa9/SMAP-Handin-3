@@ -1,44 +1,25 @@
 package djaa9.dk.thepage.hi3group15_201270115;
 
 import android.app.Activity;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 public class ActivityA extends Activity implements View.OnClickListener{
-
-    final String TAG = this.getClass().getName();
 
     Button btnStartTimer;
     EditText etTimerValue;
     ProgressBar countdownProgressBar;
-    Intent toService;
-    boolean firstReceive = true;
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //Toast.makeText(getApplicationContext(),Long.toString(intent.getLongExtra(getString(R.string.INTENT_KEY_VALUE),0)),Toast.LENGTH_SHORT).show();
-
-            if (firstReceive){
-                countdownProgressBar.setMax((int)intent.getLongExtra(getString(R.string.INTENT_KEY_VALUE),0));
-                countdownProgressBar.setProgress(0);
-                firstReceive = false;
-            }
-            else{
-                countdownProgressBar.setProgress(countdownProgressBar.getMax () - (int)intent.getLongExtra(getString(R.string.INTENT_KEY_VALUE),0));
-            }
-        }
-    };
+    Intent startServiceIntent;
+    int progress;
+    int remainingTime;
+    boolean firstTime = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +30,26 @@ public class ActivityA extends Activity implements View.OnClickListener{
         etTimerValue = (EditText) findViewById(R.id.et_timer_inputValue);
         countdownProgressBar = (ProgressBar) findViewById(R.id.pgb_countdown);
 
+        countdownProgressBar.setProgress(0);
         btnStartTimer.setOnClickListener(this);
 }
 
+    /** Register the BroadCastReceiver in onResume*/
     @Override
     protected void onResume() {
-        registerReceiver(receiver, new IntentFilter("HEJ"));
+        registerReceiver(receiver, new IntentFilter(getApplicationContext().getPackageName() + ActivityA.class.getName()));
+        countdownProgressBar.setProgress(0);
         super.onResume();
     }
 
+    /** Unregister the BroadcastReceiver in onPause*/
     @Override
     protected void onPause() {
         unregisterReceiver(receiver);
         super.onPause();
     }
 
+    /** btnStartTimer.setOnClickListener(this) */
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -73,15 +59,29 @@ public class ActivityA extends Activity implements View.OnClickListener{
         }
     }
 
+    /**onClick btn_start_timer - Creates an intent to start AlarmService*/
     private void startTimerBtnHandler(){
-        Log.d(TAG, String.valueOf(R.string.btn_start_timer_pressed_msg));
         String value = etTimerValue.getText().toString();
-        //Toast.makeText(getApplicationContext(),value,Toast.LENGTH_SHORT).show();
 
-        toService = new Intent(getApplicationContext(), AlarmService.class);
-
-        toService.putExtra(getString(R.string.INTENT_KEY_VALUE), value);
-
-        startService(toService);
+        startServiceIntent = new Intent(getApplicationContext(), AlarmService.class);
+        startServiceIntent.putExtra(getString(R.string.INTENT_KEY_VALUE), value);
+        startService(startServiceIntent);
     }
+
+    /** Receives and Handles intents from AlarmService*/
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            remainingTime = (int)intent.getLongExtra(getString(R.string.INTENT_KEY_VALUE),0);
+
+            if (firstTime){
+                countdownProgressBar.setMax(remainingTime);
+                firstTime = false;
+            }
+            else{
+                progress = countdownProgressBar.getMax () - remainingTime;
+                countdownProgressBar.setProgress(progress);
+            }
+        }
+    };
 }

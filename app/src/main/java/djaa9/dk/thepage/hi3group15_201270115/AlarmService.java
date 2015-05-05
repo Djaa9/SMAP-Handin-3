@@ -9,7 +9,8 @@ import android.util.Log;
 
 public class AlarmService extends IntentService {
 
-    private final String TAG = this.getClass().getName();
+    final String TAG = this.getClass().getName();
+    long countdownInterval = 500;
 
     public AlarmService() {
         super("AlarmServiceThread");
@@ -31,7 +32,6 @@ public class AlarmService extends IntentService {
 
         PendingIntent pi = PendingIntent.getBroadcast(getApplicationContext(), 0, i, 0); // Why 0?
         am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + sec * 1000, pi);
-        Log.d(TAG, "PendingIntent Set");
 
         // Setup Timer to send Intent with countdown to Activity A every second until countdown is 0
         long endTime = System.currentTimeMillis() + sec*1000;
@@ -41,17 +41,18 @@ public class AlarmService extends IntentService {
             remainingTime = endTime - System.currentTimeMillis();
             Log.d(TAG, "seconds remaining: " + remainingTime);
 
-            Intent counterIntent = new Intent("HEJ");
+            Intent counterIntent = new Intent(getApplicationContext().getPackageName() + ActivityA.class.getName());
             counterIntent.putExtra(getApplicationContext().getString(R.string.INTENT_KEY_VALUE), remainingTime / 1000);
             getApplicationContext().sendBroadcast(counterIntent, null);
 
+            /** Put Thread to sleep for countdownInterval number of ms*/
             synchronized (this) {
                 try {
-                    wait(200);
+                    wait(countdownInterval);
                 } catch (Exception e) {
                 }
             }
         }
-        }
     }
+}
 
