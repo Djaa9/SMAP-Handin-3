@@ -23,6 +23,7 @@
         <service android:name=".AlarmService"></service>
         
         <receiver android:name=".ChangeActivityHandler"/>
+        <receiver android:name=".ActivityA"/>
 
     </application>
 </manifest>

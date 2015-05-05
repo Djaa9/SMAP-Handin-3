@@ -24,7 +24,7 @@ public class ActivityA extends Activity implements View.OnClickListener{
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(getApplicationContext(),intent.getStringExtra(getString(R.string.INTENT_KEY_VALUE)),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),Long.toString(intent.getLongExtra(getString(R.string.INTENT_KEY_VALUE),0)),Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -41,7 +41,7 @@ public class ActivityA extends Activity implements View.OnClickListener{
 
     @Override
     protected void onResume() {
-        registerReceiver(receiver, new IntentFilter());
+        registerReceiver(receiver, new IntentFilter("HEJ"));
         super.onResume();
     }
 
