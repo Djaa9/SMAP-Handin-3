@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 public class ActivityA extends Activity implements View.OnClickListener{
 
@@ -33,7 +32,6 @@ public class ActivityA extends Activity implements View.OnClickListener{
 
         countdownProgressBar.setProgress(0);
         btnStartTimer.setOnClickListener(this);
-        Toast.makeText(getApplicationContext(), "YI", Toast.LENGTH_SHORT).show();
 }
 
     /** Register the BroadCastReceiver in onResume*/
