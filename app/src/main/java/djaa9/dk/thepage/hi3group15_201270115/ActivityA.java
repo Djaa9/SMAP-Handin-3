@@ -33,7 +33,7 @@ public class ActivityA extends Activity implements View.OnClickListener{
 
         countdownProgressBar.setProgress(0);
         btnStartTimer.setOnClickListener(this);
-        Toast.makeText(getApplicationContext(),"YI", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "YI", Toast.LENGTH_SHORT).show();
 }
 
     /** Register the BroadCastReceiver in onResume*/
